@@ -2,7 +2,8 @@
   "name": "ズボラ生活サポート",
   "short_name": "ズボラサポ",
   "description": "タスク・お金・食事をまとめて管理",
-  "start_url": "/",
+  "start_url": "/task-app/",
+  "scope": "/task-app/"
   "display": "standalone",
   "background_color": "#f0f2f5",
   "theme_color": "#667eea",
