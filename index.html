@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ズボラ生活サポート</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#667eea" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- ヘッダー -->
+    <header class="header">
+      <h1>🧠 ズボラサポート</h1>
+      <div class="header-sub">
+        <span id="today-date"></span>
+        <div class="energy-selector">
+          <span>今日のエネルギー：</span>
+          <button class="energy-btn active" data-level="low">低</button>
+          <button class="energy-btn" data-level="mid">中</button>
+          <button class="energy-btn" data-level="high">高</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- タブナビゲーション -->
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="tasks">✅ タスク</button>
+      <button class="tab-btn" data-tab="money">💰 お金</button>
+      <button class="tab-btn" data-tab="food">🍜 食事</button>
+    </nav>
+
+    <!-- タスクタブ -->
+    <section class="tab-content active" id="tab-tasks">
+      <div class="score-bar">
+        <span>今日のスコア：</span>
+        <span id="score-display">0 点</span>
+        <button id="calendar-btn">📅</button>
+        <button id="edit-btn">✏️</button>
+      </div>
+      <ul id="task-list"></ul>
+    </section>
+
+    <!-- お金タブ -->
+    <section class="tab-content" id="tab-money">
+      <div class="money-card">
+        <h2>💰 今月の残金</h2>
+        <div class="money-display">
+          <span id="remaining-display">¥0</span>
+        </div>
+        <div class="money-actions">
+          <input type="number" id="spend-input" placeholder="使った金額" />
+          <button id="spend-btn">支出を記録</button>
+        </div>
+        <button id="set-budget-btn" class="sub-btn">月初予算を設定</button>
+      </div>
+
+      <div class="money-card">
+        <h2>🛵 出前カウンター</h2>
+        <div class="delivery-display">
+          <span id="delivery-count">0</span>
+          <span>回 / 今月</span>
+        </div>
+        <div class="delivery-actions">
+          <button id="delivery-add-btn">出前した +1</button>
+          <button id="delivery-undo-btn" class="sub-btn">取り消し</button>
+        </div>
+        <div class="savings-display">
+          <span>自炊で節約した金額：</span>
+          <span id="savings-display">¥0</span>
+          <button id="add-saving-btn" class="sub-btn">節約を記録 +300円</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 食事タブ -->
+    <section class="tab-content" id="tab-food">
+      <div class="food-card">
+        <h2>🎲 今日何食べる？</h2>
+        <div id="food-suggestion" class="food-suggestion">ボタンを押してね</div>
+        <button id="suggest-btn">ランダムで提案！</button>
+      </div>
+
+      <div class="food-card">
+        <h2>🛒 常備食材チェック</h2>
+        <ul id="pantry-list"></ul>
+        <div class="pantry-actions">
+          <input type="text" id="pantry-input" placeholder="食材を追加" />
+          <button id="pantry-add-btn">追加</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- カレンダーモーダル -->
+  <div id="calendar-modal" class="modal hidden">
+    <div class="modal-content">
+      <button class="modal-close" id="calendar-close">✕</button>
+      <h2>📅 過去の記録</h2>
+      <input type="date" id="date-picker" />
+      <ul id="past-task-list"></ul>
+    </div>
+  </div>
+
+  <!-- タスク編集モーダル -->
+  <div id="edit-modal" class="modal hidden">
+    <div class="modal-content">
+      <button class="modal-close" id="edit-close">✕</button>
+      <h2>✏️ タスク編集</h2>
+      <ul id="edit-task-list"></ul>
+      <div class="edit-actions">
+        <input type="text" id="new-task-name" placeholder="タスク名" />
+        <input type="number" id="new-task-score" placeholder="点数" />
+        <button id="add-task-btn">追加</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 予算設定モーダル -->
+  <div id="budget-modal" class="modal hidden">
+    <div class="modal-content">
+      <button class="modal-close" id="budget-close">✕</button>
+      <h2>💰 月初予算を設定</h2>
+      <input type="number" id="budget-input" placeholder="今月の予算（円）" />
+      <button id="budget-save-btn">設定する</button>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <script src="app.js"></script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+  }
+  </script>
+</body>
+</html>
