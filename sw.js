@@ -1,10 +1,11 @@
 const CACHE_NAME = 'zubora-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/app.js',
-  '/manifest.json'
+  '/task-app/',
+  '/task-app/index.html',
+  '/task-app/style.css',
+  '/task-app/app.js',
+  '/task-app/icons/icon-192.png',
+  '/task-app/icons/icon-512.png',
 ];
 
 self.addEventListener('install', event => {
