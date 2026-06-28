@@ -386,9 +386,60 @@ document.getElementById('pantry-add-btn').addEventListener('click', () => {
 });
 
 // =====================
+// デイリータスク自動生成
+// =====================
+function getDayOfWeek() {
+  return new Date().getDay(); // 0=日, 1=月, 2=火, 3=水, 4=木, 5=金, 6=土
+}
+
+function initDailyTasks() {
+  const todayKey = getTodayKey();
+  const isWeekday = getDayOfWeek() >= 1 && getDayOfWeek() <= 5;
+
+  // デフォルトタスク定義
+  const defaultTasks = [
+    { name: 'カロミル記録', score: 30, alwaysShow: true },
+    { name: '家計簿記録', score: 30, alwaysShow: true },
+    { name: '出社', score: 100, alwaysShow: false }, // 平日のみ
+  ];
+
+  db.ref(`dailyInit/${todayKey}`).once('value', snap => {
+    // 今日すでに初期化済みならスキップ
+    if (snap.val() === true) return;
+
+    // タスク一覧を取得して、存在しないものだけ追加
+    db.ref('tasks').once('value', taskSnap => {
+      const existingNames = [];
+      taskSnap.forEach(child => {
+        existingNames.push(child.val().name);
+      });
+
+      const promises = [];
+      defaultTasks.forEach(task => {
+        // 平日以外は出社をスキップ
+        if (!task.alwaysShow && !isWeekday) return;
+        // すでに同名タスクがあればスキップ
+        if (existingNames.includes(task.name)) return;
+
+        promises.push(
+          db.ref('tasks').push({ name: task.name, score: task.score, done: false })
+        );
+      });
+
+      Promise.all(promises).then(() => {
+        // 今日の初期化完了フラグを立てる
+        db.ref(`dailyInit/${todayKey}`).set(true);
+      });
+    });
+  });
+}
+
+// =====================
 // 初期化
 // =====================
 initHeader();
+initDailyTasks();
 loadTasks();
 loadMoney();
 loadPantry();
+
